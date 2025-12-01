@@ -10,10 +10,12 @@ fn main() {
             if line.starts_with('R') { x } else { -x }
         })
         .fold((50, 0), |(current, result), x| {
-            (
-                (current + x).rem_euclid(100),
-                result + if current == 0 { 1 } else { 0 },
-            )
+            let mut zeros = (x / 100).abs();
+            let d = (x % 100).abs();
+            if (x > 0 && current + d >= 100) || (x < 0 && current != 0 && current - d <= 0) {
+                zeros += 1;
+            }
+            ((current + x).rem_euclid(100), result + zeros)
         })
         .1;
 
